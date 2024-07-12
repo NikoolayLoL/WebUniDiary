@@ -1,0 +1,128 @@
+﻿@page
+@model WebUniDiary.Pages.Admin.ViewStudentModel
+@{
+}
+
+@Html.Partial("Admin/_ToolBar")
+
+<div class="mt-0">
+    <h3 class="text-center">All Students</h3>
+    <h5 class="text-center">In total @Model.Users.Count()</h5>
+</div>
+
+<div class="d-flex flex-wrap justify-content-center mt-3">
+    <!-- Pagination links -->
+    <ul class="pagination me-3">
+        <li class="page-item">
+            <a class="page-link" href="/Admin/ViewStudent?pageSize=@Model.PageSize&currentPage=@Math.Max(Model.CurrentPage - 1, 1)">Previous</a>
+        </li>
+        @for (int i = 1; i <= @Model.TotalPages; i++)
+        {
+            <li class="page-item @(Model.CurrentPage == i ? "active" : "")">
+                <a class="page-link" href="/Admin/ViewStudent?pageSize=@Model.PageSize&currentPage=@i">@i</a>
+            </li>
+        }
+        <li class="page-item">
+            <a class="page-link" href="/Admin/ViewStudent?pageSize=@Model.PageSize&currentPage=@Math.Min(Model.CurrentPage + 1, Model.TotalPages)">Next</a>
+        </li>
+    </ul>
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+            Users per page
+        </button>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/Admin/ViewStudent?pageSize=1&currentPage=1">1</a></li>
+            <li><a class="dropdown-item" href="/Admin/ViewStudent?pageSize=2&currentPage=1">2</a></li>
+            <li><a class="dropdown-item" href="/Admin/ViewStudent?pageSize=5&currentPage=1">5</a></li>
+            <li><a class="dropdown-item" href="/Admin/ViewStudent?pageSize=10&currentPage=1">10</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="container-fluid align-self-lg-center mb-4">
+    <form class="row gy-2 gx-3 align-items-center" method="get">
+        <div class="col-auto">
+            <label class="visually-hidden" for="Email">Email Address</label>
+            <input type="text" class="form-control" id="Email" placeholder="student@uni.ruse" asp-for="Email">
+        </div>
+        <div class="col-auto">
+            <label class="visually-hidden" for="FirstName">First Name</label>
+            <input type="text" class="form-control" id="FirstName" placeholder="Jane" asp-for="FirstName">
+        </div>
+        <div class="col-auto">
+            <label class="visually-hidden" for="LastName">Last Name</label>
+            <input type="text" class="form-control" id="LastName" placeholder="Smith" asp-for="LastName">
+        </div>
+        <div class="col-auto">
+            <label class="visually-hidden" for="Extra">Preference</label>
+            <select class="form-select" id="Extra" asp-for="ExtraChoice">
+                <option selected>Choose</option>
+                <option value="1">Faculty Number</option>
+                <option value="2">Specialty</option>
+                <option value="3">EGN</option>
+            </select>
+        </div>
+        <div class="col-auto">
+            <label class="visually-hidden" for="ExtraField">Extra</label>
+            <input type="text" class="form-control" id="ExtraField" placeholder="Additional" asp-for="ExtraField">
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">Find Student</button>
+        </div>
+    </form>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        @foreach (var user in @Model.Users)
+        {
+            <div class="col-md-12 mb-3">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="row">
+                            @{
+                                var student = Model.Students.Find(s => s.UserId == user.Id);
+                            }
+                            <div class="col-md-2">
+                                <h5><i class="fa-solid fa-envelope"></i> @user.Email</h5>
+                                <a href="/Admin/EditStudent?userId=@user.Id" class="btn btn-outline-primary btn-sm">Edit User</a>
+                            </div>
+                            @if (student != null)
+                            {
+                                <div class="col-md-2" title="Name">
+                                    <p><i class="fa-solid fa-user"></i> @student.FirstName @student.LastName</p>
+                                </div>
+                                <div class="col-md-2" title="Specialty">
+                                    <p><i class="fa-solid fa-book"></i> @student.Specialty</p>
+                                </div>
+                                <div class="col-md-2" title="Faculty Number">
+                                    <p><i class="fa-solid fa-graduation-cap"></i> @student.FacultyNumber</p>
+                                </div>
+                                <div class="col-md-2" title="EGN">
+                                    <p><i class="fa-solid fa-id-card"></i> @student.EGN</p>
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="button" class="btn @(student.Active ? "btn-success" : "btn-danger")">
+                                        @(student.Active ? "Active" : "Inactive")
+                                    </button>
+                                </div>
+                            }
+                            else
+                            {
+                                for (int i = 1; i < 5; i++)
+                                {
+                                    <div class="col-md-2"></div>
+                                }
+                                <div class="col-md-2">
+                                    <button type="button" class="btn btn-warning">
+                                        Configure
+                                    </button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

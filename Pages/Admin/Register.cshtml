@@ -1,0 +1,31 @@
+﻿@page
+@model WebUniDiary.Pages.Admin.RegisterModel
+@{
+}
+
+@Html.Partial("Admin/_ToolBar")
+
+<div class="row">
+    <div class="col-md-8 mx-auto rounded border p-3">
+        <h2 class="text-center mb-5">Finish setting up your account.</h2>
+
+        <form method="post" enctype="multipart/form-data">
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label">Preferences</label>
+                <div class="col-sm-10">
+                    <input class="form-control" asp-for="adminDto.Preferences" />
+                    <span asp-validation-for="adminDto.Preferences" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3 justify-content-center mt-4">
+                <div class="col-sm-5">
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Finish</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

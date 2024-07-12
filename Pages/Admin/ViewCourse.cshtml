@@ -1,0 +1,72 @@
+﻿@page
+@model WebUniDiary.Pages.Admin.ViewCourseModel
+@{
+}
+
+@Html.Partial("Admin/_ToolBar")
+
+<div class="mt-0">
+    <h3 class="text-center">All Courses</h3>
+    <h5 class="text-center">In total @Model.Courses.Count()</h5>
+</div>
+
+<div class="d-flex flex-wrap justify-content-center mt-3">
+    <!-- Pagination links -->
+    <ul class="pagination me-3">
+        <li class="page-item">
+            <a class="page-link" href="/Admin/ViewCourse?pageSize=@Model.PageSize&currentPage=@Math.Max(Model.CurrentPage - 1, 1)">Previous</a>
+        </li>
+        @for (int i = 1; i <= @Model.TotalPages; i++)
+        {
+            <li class="page-item @(Model.CurrentPage == i ? "active" : "")">
+                <a class="page-link" href="/Admin/ViewCourse?pageSize=@Model.PageSize&currentPage=@i">@i</a>
+            </li>
+        }
+        <li class="page-item">
+            <a class="page-link" href="/Admin/ViewCourse?pageSize=@Model.PageSize&currentPage=@Math.Min(Model.CurrentPage + 1, Model.TotalPages)">Next</a>
+        </li>
+    </ul>
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+            Courses per page
+        </button>
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/Admin/ViewCourse?pageSize=1&currentPage=1">1</a></li>
+            <li><a class="dropdown-item" href="/Admin/ViewCourse?pageSize=2&currentPage=1">2</a></li>
+            <li><a class="dropdown-item" href="/Admin/ViewCourse?pageSize=5&currentPage=1">5</a></li>
+            <li><a class="dropdown-item" href="/Admin/ViewCourse?pageSize=10&currentPage=1">10</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        @foreach (var course in @Model.Courses)
+        {
+            <div class="col-md-12 mb-3">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="row">
+                            @{
+                                var teacher = Model.Teachers.Find(t => t.Id == course.TeacherID);
+                            }
+                            <div class="col-md-3" title="Course">
+                                <h5><i class="fa-solid fa-thumbtack" ></i> @course.Name</h5>
+                                <a href="/Admin/EditCourse?courseId=@course.Id" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-pen-to-square"></i> Edit Course</a>
+                            </div>
+                            <div class="col-md-5" title="Description">
+                                <p><i class="fa-solid fa-note-sticky"></i> @course.Description</p>
+                            </div>
+                            @if (teacher != null)
+                            {
+                                <div class="col-md-2" title="Teacher">
+                                    <p><i class="fa-solid fa-user-tie"></i> @teacher.FirstName @teacher.LastName</p>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

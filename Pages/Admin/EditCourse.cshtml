@@ -1,0 +1,70 @@
+﻿@page
+@model WebUniDiary.Pages.Admin.EditCourseModel
+@{
+}
+
+@Html.Partial("Admin/_ToolBar")
+
+<div class="row">
+    <div class="col-md-8 mx-auto rounded border p-3">
+        <h2 class="text-center mb-5">New Course</h2>
+
+        @if (Model.failureMessage.Length > 0)
+        {
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>@Model.failureMessage</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        <form method="post" enctype="multipart/form-data">
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label">Course Name</label>
+                <div class="col-sm-10">
+                    <input class="form-control" asp-for="CourseDto.Name" value="@Model.Course.Name" />
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label">Course Description</label>
+                <div class="col-sm-10">
+                    <input class="form-control" asp-for="CourseDto.Description" value="@Model.Course.Description" />
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label">Assigned Teacher</label>
+                <div class="col-sm-10">
+                    <input class="form-control" asp-for="CourseDto.TeacherID" value="@Model.Course.TeacherID" />
+                </div>
+            </div>
+
+            @if (@Model.Course.TeacherID != 0)
+            {
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label">First Name</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" asp-for="Teacher.FirstName" value="@Model.Teacher.FirstName" disabled />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label">Last Name</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" asp-for="Teacher.LastName" value="@Model.Teacher.LastName" disabled />
+                    </div>
+                </div>
+            }
+
+            <div class="row mb-3">
+                <div class="offset-sm-4 col-sm-4 d-grid">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+                <div class="col-sm-4 d-grid">
+                    <a class="btn btn-outline-primary" href="/" role="button">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

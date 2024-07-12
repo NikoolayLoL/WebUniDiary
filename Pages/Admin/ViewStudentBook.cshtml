@@ -1,0 +1,75 @@
+﻿@page
+@model WebUniDiary.Pages.Admin.ViewStudentBookModel
+@{
+    ViewData["Title"] = "View Student Book";
+}
+
+@Html.Partial("Admin/_ToolBar")
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12 mb-4">
+            <h2 class="text-center mb-4">Students - @Model.specialty.Name</h2>
+            <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addStudentModal">Add Student</button>
+        </div>
+    </div>
+
+    <div class="row">
+        @foreach (var user in Model.students)
+        {
+            <div class="col-md-4 mb-3">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">@user.FirstName</h5>
+                        <p class="card-text">@user.LastName</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Add Student Modal -->
+<div class="modal fade" id="addStudentModal" tabindex="-1" aria-labelledby="addStudentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addStudentModalLabel">Assign a Student</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="addStudentForm">
+                    <div class="mb-3">
+                        <label for="studentEmail" class="form-label">Student Email</label>
+                        <input type="email" class="form-control" id="studentEmail" placeholder="Enter student email">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="assignStudent(@Model.specialtyId)">Assign Student</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function assignStudent(specialtyId)
+        {
+            var studentEmail = $('#studentEmail').val();
+
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Page("/Admin/ViewStudentBook", new { handler = "AssignStudent" })',
+                data: { Id: specialtyId, email: studentEmail },
+                success: function () {
+                    location.reload(); // Refresh the page upon success
+                },
+                error: function (xhr, status, error) {
+                    alert('Error: ' + error);
+                }
+            });
+        }
+    </script>
+}

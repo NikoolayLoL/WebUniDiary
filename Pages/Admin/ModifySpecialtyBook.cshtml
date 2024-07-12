@@ -1,0 +1,197 @@
+﻿@page
+@model WebUniDiary.Pages.Admin.ModifySpecialtyBookModel
+
+@Html.Partial("Admin/_ToolBar")
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <!-- Specialty Edit Form -->
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h2 class="text-center mb-4">Edit this Specialty</h2>
+                    <form method="post" enctype="multipart/form-data">
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label">Name</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="Name" asp-for="specialtyBookDto.Name" value="@Model.specialtyBook.Name" required />
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label">Description</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" asp-for="specialtyBookDto.Description" value="@Model.specialtyBook.Description" />
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label class="col-sm-2 col-form-label">Status</label>
+                            <div class="col-sm-10">
+                                <select class="form-select" asp-for="specialtyBookDto.Active">
+                                    @{
+                                        if (@Model.specialtyBook.Active == true)
+                                        {
+                                            <option value="true" selected>Active</option>
+                                            <option value="false">Inactive</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="true">Active</option>
+                                            <option value="false" selected>Inactive</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-sm-6 d-grid">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                            <div class="col-sm-6 d-grid">
+                                <a class="btn btn-outline-primary" href="/Admin/BrowseSpecialtyBook" role="button">Cancel</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Semesters and Courses Form -->
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <form id="AddNewSemester">
+                        @{
+                            foreach (var semester in @Model.semesters)
+                            {
+                                <h3 class="text-center mb-4">Semester @semester.SemesterNumber</h3>
+                                <div class="col-md-12 mb-3">
+                                    <button type="button" class="btn btn-primary" data-semester-id="@semester.Id" onclick="addNewSemester(this)">Add Course</button>
+                                    <span id="newCoursesStorage-@semester.Id"></span>
+                                </div>
+                                foreach (var semesterCourse in @Model.semesterCourses.Where(sc => sc.SemesterId == semester.Id))
+                                {
+                                    var course = @Model.courses.Find(c => c.Id == semesterCourse.CourseId);
+                                    if (course != null)
+                                    {
+                                        <div class="col-md-12 mb-3">
+                                            <div class="card shadow-sm">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-md-3" title="Course">
+                                                            <h5><i class="fa-solid fa-thumbtack"></i> @course.Name</h5>
+                                                            <a href="/Admin/EditCourse?courseId=@course.Id" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-pen-to-square"></i> Edit Course</a>
+                                                        </div>
+                                                        <div class="col-md-9" title="Description">
+                                                            <p><i class="fa-solid fa-note-sticky"></i> @course.Description</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            }
+                        }
+                    </form>
+                </div>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="coursesModal" tabindex="-1" aria-labelledby="coursesModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="coursesModalLabel">Select a Course</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="coursesList"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" id="saveCourseSelection">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @section Scripts {
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <script>
+                    function addNewSemester(button) {
+                        var semesterId = $(button).data('semester-id');
+
+                        $.ajax({
+                            type: 'GET',
+                            dataType: 'json',
+                            contentType: 'application/json',
+                            url: '@Url.Page("/Admin/ModifySpecialtyBook", new { handler = "ModalData" })',
+                            success: function (result) {
+                                var courses = result.courses;
+                                var coursesHtml = '';
+
+                                for (var i = 0; i < courses.length; i++) {
+                                    coursesHtml += '<div class="form-check">';
+                                    coursesHtml += '<input class="form-check-input" type="radio" name="courseSelection" value="' + courses[i].id + '" id="course' + courses[i].id + '">';
+                                    coursesHtml += '<label class="form-check-label" for="course' + courses[i].id + '">' + courses[i].name + '</label>';
+                                    coursesHtml += '</div>';
+                                }
+
+                                $('#coursesList').html(coursesHtml);
+                                $('#saveCourseSelection').data('semester-id', semesterId);
+                                $('#coursesModal').modal('show');
+                            },
+                            error: function (xhr, status, error) {
+                                $('#newCoursesStorage-' + semesterId).html('Error: ' + error);
+                            }
+                        });
+                    }
+
+                    $('#saveCourseSelection').click(function () {
+                        var selectedCourseId = $('input[name="courseSelection"]:checked').val();
+                        var semesterId = $(this).data('semester-id');
+
+                        if (!selectedCourseId) {
+                            alert('Please select a course');
+                            return;
+                        }
+
+                        $.ajax({
+                            type: 'GET',
+                            url: '@Url.Page("/Admin/ModifySpecialtyBook", new { handler = "SaveCourseSelection" })',
+                            data: {
+                                semesterId: semesterId,
+                                courseId: selectedCourseId
+                            },
+                            success: function (result) {
+                                var courseHtml = '<div class="col-md-12 mb-3">';
+                                courseHtml += '<div class="card shadow-sm">';
+                                courseHtml += '<div class="card-body">';
+                                courseHtml += '<div class="row">';
+                                courseHtml += '<div class="col-md-3" title="Course">';
+                                courseHtml += '<h5><i class="fa-solid fa-thumbtack"></i> ' + result.courseName + '</h5>';
+                                courseHtml += '<a href="/Admin/EditCourse?courseId=' + selectedCourseId + '" class="btn btn-outline-primary btn-sm"><i class="fa-solid fa-pen-to-square"></i> Edit Course</a>';
+                                courseHtml += '</div>';
+                                courseHtml += '<div class="col-md-9" title="Description">';
+                                courseHtml += '<p><i class="fa-solid fa-note-sticky"></i> ' + result.courseDescription + '</p>';
+                                courseHtml += '</div>';
+                                courseHtml += '</div>';
+                                courseHtml += '</div>';
+                                courseHtml += '</div>';
+                                courseHtml += '</div>';
+
+                                // Insert the new course card after the button
+                                $('#newCoursesStorage-' + semesterId).after(courseHtml);
+                                $('#coursesModal').modal('hide');
+                            },
+                            error: function (xhr, status, error) {
+                                alert('Error: ' + error);
+                            }
+                        });
+                    });
+                </script>
+            }
+
+        </div>
+    </div>
+</div>

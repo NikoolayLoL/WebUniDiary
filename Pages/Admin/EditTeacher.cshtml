@@ -1,0 +1,80 @@
+﻿@page
+@model WebUniDiary.Pages.Admin.EditTeacherModel
+@{
+}
+
+@Html.Partial("Admin/_ToolBar")
+
+<div class="row">
+    <div class="col-md-8 mx-auto rounded border p-3">
+        <h2 class="text-center mb-5">New Teacher</h2>
+
+        @if (Model.failureMessage.Length > 0)
+        {
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>@Model.failureMessage</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        <form method="post" enctype="multipart/form-data">
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label">Email</label>
+                <div class="col-sm-10">
+                    <input class="form-control" asp-for="UserDto.Email" type="email" value="@Model.User.Email" />
+                    <span asp-validation-for="UserDto.Email" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label">First Name</label>
+                <div class="col-sm-10">
+                    <input class="form-control" asp-for="TeacherDto.FirstName" value="@Model.Teacher.FirstName" />
+                    <span asp-validation-for="TeacherDto.FirstName" class="text-danger" ></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label">Last Name</label>
+                <div class="col-sm-10">
+                    <input class="form-control" asp-for="TeacherDto.LastName" value="@Model.Teacher.LastName" />
+                    <span asp-validation-for="TeacherDto.LastName" class="text-danger"></span>
+                </div>
+            </div>
+
+
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label">Title</label>
+                <div class="col-sm-10">
+                    <input class="form-control" asp-for="TeacherDto.Title" value="@Model.Teacher.Title" />
+                    <span asp-validation-for="TeacherDto.Title" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label">Phone Number</label>
+                <div class="col-sm-10">
+                    <input class="form-control" asp-for="TeacherDto.PhoneNumber" maxlength="15" value="@Model.Teacher.PhoneNumber" />
+                    <span asp-validation-for="TeacherDto.PhoneNumber" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label">Address</label>
+                <div class="col-sm-10">
+                    <input class="form-control" asp-for="TeacherDto.Address" value="@Model.Teacher.Address" />
+                    <span asp-validation-for="TeacherDto.Address" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="offset-sm-4 col-sm-4 d-grid">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+                <div class="col-sm-4 d-grid">
+                    <a class="btn btn-outline-primary" href="/" role="button">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

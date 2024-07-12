@@ -1,0 +1,121 @@
+﻿@page
+@model WebUniDiary.Pages.Admin.IndexModel
+@{
+}
+
+<link rel="stylesheet" href="~/css/admin_index.css" />
+
+<body>
+
+    @{
+        ViewData["Value"] = Model.isAccountSetUp;
+    }
+
+    @Html.Partial("Admin/_ToolBar")
+
+    @if (Model.successMessage.Length > 0)
+    {
+        <div class="alert alert-success alert-dismissible position-fixed" style="width: 100%;" role="alert">
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            @Model.successMessage
+        </div>
+    }
+
+    @if (Model.failureMessage.Length > 0)
+    {
+        <div class="alert alert-danger alert-dismissible position-fixed" style="width: 100%;" role="alert">
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            @Model.failureMessage
+        </div>
+    }
+
+    <div class="container">
+    <!-- Dashboard Overview -->
+        <div class="row mb-4 mt-4">
+            <div class="col-md-3">
+                <a href="/Admin/ViewStudent" class="card mb-3 card-clickable" style="text-decoration: none;">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fa-solid fa-user"></i> Total Students</h5>
+                        <p class="card-text">@Model.totalStudents</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a href="/Admin/ViewTeacher" class="card mb-3 card-clickable" style="text-decoration: none;">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fa-solid fa-user-tie"></i> Total Teachers</h5>
+                        <p class="card-text">@Model.totalTeachers</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a href="/Admin/ViewCourse" class="card mb-3 card-clickable" style="text-decoration: none;">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fa-solid fa-file-signature"></i> Total Courses</h5>
+                        <p class="card-text">@Model.totalCourses</p>
+                    </div>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a href="/Admin/Alerts" class="card mb-3 danger card-clickable" style="text-decoration: none;">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fa-solid fa-triangle-exclamation"></i> System Alerts</h5>
+                        <p class="card-text">2</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        Recent Activity
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            <li class="list-group-item">User John Doe registered</li>
+                            <li class="list-group-item">Course "Introduction to AI" was created</li>
+                            <li class="list-group-item">User Jane Smith updated her profile</li>
+                            <li class="list-group-item">Admin approved a new course</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        Quick Actions
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-2 d-md-block">
+                            <button class="btn btn-primary" type="button">Add New User</button>
+                            <button class="btn btn-secondary" type="button">Create New Course</button>
+                            <button class="btn btn-info" type="button">Generate Report</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Announcements -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        Announcements
+                    </div>
+                    <div class="card-body">
+                        <p>System maintenance scheduled for May 25th at 2:00 AM.</p>
+                        <p>New course templates are now available.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

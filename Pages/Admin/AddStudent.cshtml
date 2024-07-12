@@ -1,0 +1,118 @@
+﻿@page
+@model WebUniDiary.Pages.Admin.AddStudentModel
+@{
+}
+
+@Html.Partial("Admin/_ToolBar")
+
+<div class="row">
+    <div class="col-md-8 mx-auto rounded border p-3">
+        <h2 class="text-center mb-5">New Student</h2>
+
+        @if (Model.failureMessage.Length > 0)
+        {
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>@Model.failureMessage</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        
+        <form method="post" enctype="multipart/form-data">
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label">Email</label>
+                <div class="col-sm-10">
+                    <input class="form-control" asp-for="UserDto.Email" type="email" />
+                    <span asp-validation-for="UserDto.Email" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label">Password</label>
+                <div class="col-sm-10">
+                    <input class="form-control" asp-for="UserDto.Password" type="password" />
+                    <span asp-validation-for="UserDto.Password" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label">Role</label>
+                <div class="col-sm-10">
+                    <select class="form-select" asp-for="UserDto.Role">
+                        <option value="Student">Student</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label">First Name</label>
+                <div class="col-sm-10">
+                    <input class="form-control" asp-for="StudentDto.FirstName" />
+                    <span asp-validation-for="StudentDto.FirstName" class="text-danger"></span>
+                </div>
+            </div>
+
+
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label">Last Name</label>
+                <div class="col-sm-10">
+                    <input class="form-control" asp-for="StudentDto.LastName" />
+                    <span asp-validation-for="StudentDto.LastName" class="text-danger"></span>
+                </div>
+            </div>
+
+
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label">EGN</label>
+                <div class="col-sm-10">
+                    <input class="form-control" asp-for="StudentDto.EGN" maxlength="10" />
+                    <span asp-validation-for="StudentDto.EGN" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label">Specialty</label>
+                <div class="col-sm-10">
+                    <select class="form-select" asp-for="StudentDto.Specialty">
+                        <option value="IITB">IITB</option>
+                        <option value="CoputerScience">CoputerScience</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label">Phone Number</label>
+                <div class="col-sm-10">
+                    <input class="form-control" asp-for="StudentDto.PhoneNumber" maxlength="15" />
+                    <span asp-validation-for="StudentDto.PhoneNumber" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label">Address</label>
+                <div class="col-sm-10">
+                    <input class="form-control" asp-for="StudentDto.Address" />
+                    <span asp-validation-for="StudentDto.Address" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label">Active</label>
+                <div class="col-sm-10">
+                    <select class="form-select" asp-for="StudentDto.Active">
+                        <option value="false">Inactive</option>
+                        <option value="true">Active</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="offset-sm-4 col-sm-4 d-grid">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+                <div class="col-sm-4 d-grid">
+                    <a class="btn btn-outline-primary" href="/" role="button">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
